@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Task_001;
 
@@ -11,9 +12,11 @@ using Task_001;
 namespace Task_001.Migrations
 {
     [DbContext(typeof(ITIContext))]
-    partial class ITIContextModelSnapshot : ModelSnapshot
+    [Migration("20260513074649_SyncFix")]
+    partial class SyncFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,21 +85,21 @@ namespace Task_001.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "1",
+                            ConcurrencyStamp = "fa9fd0a2-432c-46c7-a4b2-28e547a8c281",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "2",
+                            ConcurrencyStamp = "8c1d0e03-befe-4edb-8567-d1d189ed9c76",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "3",
+                            ConcurrencyStamp = "1a123dfe-312b-41e2-9a77-d007b13339a6",
                             Name = "Instructor",
                             NormalizedName = "INSTRUCTOR"
                         });

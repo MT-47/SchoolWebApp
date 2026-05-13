@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,8 +32,9 @@ namespace Task_001
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                //.UseLazyLoadingProxies()
-                .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=efcorev1;Integrated Security=True;Trust Server Certificate=True");
+                .UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=efcorev1;Integrated Security=True;Trust Server Certificate=True")
+                .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)); // بدون سيميكولون قبلها
+
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -40,12 +42,15 @@ namespace Task_001
         {
             modelBuilder.Entity<IdentityRole>(r =>
             {
-                r.HasData(new IdentityRole() { Id = "1", Name = "Admin", NormalizedName = "ADMIN" });
-                r.HasData(new IdentityRole() { Id = "2", Name = "Student", NormalizedName = "STUDENT" });
-                r.HasData(new IdentityRole() { Id = "3", Name = "Instructor", NormalizedName = "INSTRUCTOR" });
+                r.HasData(
+                    new IdentityRole() { Id = "1", Name = "Admin", NormalizedName = "ADMIN", ConcurrencyStamp = "1" },
+                    new IdentityRole() { Id = "2", Name = "Student", NormalizedName = "STUDENT", ConcurrencyStamp = "2" },
+                    new IdentityRole() { Id = "3", Name = "Instructor", NormalizedName = "INSTRUCTOR", ConcurrencyStamp = "3" }
+                );
             });
+
             modelBuilder.Entity<StudentCourse>().HasKey(sc => new { sc.StdId, sc.CrsId });
-            
+
             modelBuilder.Entity<Department>()
                 .HasOne(d => d.Manager)
                 .WithOne(i => i.ManagedDepartment)
