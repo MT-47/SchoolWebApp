@@ -12,7 +12,6 @@ namespace Task_001
         [Required, StringLength(50,MinimumLength = 3)] public string Name { get; set; }
         [Required, Range(18, 40)] public int Age { get; set; }
         [Required, EmailAddress, MaxLength(100)] public string Email { get; set; }
-        [MaxLength(255)] public string Password { get; set; }
         public int? DeptNo { get; set; }
 
         [ForeignKey("DeptNo")] public virtual Department Department { get; set; }

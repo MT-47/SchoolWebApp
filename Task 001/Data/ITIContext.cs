@@ -10,7 +10,8 @@ namespace Task_001
 {
     public class ApplicationUser : IdentityUser
     {
-        // You can add additional properties here if needed
+        public int? StudentId { get; set; }
+        public virtual Student Student { get; set; }
     }
     public class ITIContext : IdentityDbContext<ApplicationUser>
     {

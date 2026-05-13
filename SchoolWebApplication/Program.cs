@@ -13,17 +13,15 @@ namespace SchoolWebApplication
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddAuthentication(
-                CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie();
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(s =>
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                s.SignIn.RequireConfirmedEmail = false;
-                //s.Lockout.AllowedForNewUsers = true;
-                //s.Lockout.MaxFailedAccessAttempts = 5;
+                options.Password.RequireDigit = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 3;
             })
-                .AddEntityFrameworkStores<ITIContext>();
+            .AddEntityFrameworkStores<ITIContext>();
 
             builder.Services.AddControllersWithViews();
 

@@ -1,105 +1,96 @@
 ﻿using Helper;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchoolWebApplication.Models;
-using System.Security.Claims;
 using Task_001;
 
-namespace SchoolWebApplication.Controllers
+public class AccountController : Controller
 {
-    public class AccountController : Controller
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IEntityRepo<Student> _studentRepo;
+
+    public AccountController(
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
+        IEntityRepo<Student> studentRepo)
     {
-        IEntityRepo<Student> studentrepo;
-        UserManager<ApplicationUser> usermanager;
-        SignInManager<ApplicationUser> signinmanager;
-        public AccountController(IEntityRepo<Student> _studentRepo, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager) 
+        _userManager = userManager;
+        _signInManager = signInManager;
+        _studentRepo = studentRepo;
+    }
+
+    public IActionResult Register() => View();
+
+    [HttpPost]
+    public async Task<IActionResult> Register(RegisterViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var student = new Student
         {
-            studentrepo = _studentRepo;
-            usermanager = _userManager;
-            signinmanager = _signInManager;
+            Name = model.Name,
+            Age = model.Age,
+            Email = model.Email,
+        };
+        _studentRepo.Add(student);
+        _studentRepo.Save();
+
+        var user = new ApplicationUser
+        {
+            UserName = model.Email,
+            Email = model.Email,
+            StudentId = student.Id
+        };
+
+        var result = await _userManager.CreateAsync(user, model.Password);
+
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+            return View(model);
         }
 
-        public IActionResult Register()
+        await _userManager.AddToRoleAsync(user, "Student");
+
+        return RedirectToAction("Login");
+    }
+
+    public IActionResult CheckEmail(string Email)
+    {
+        var student = _studentRepo.Find(s => s.Email == Email).FirstOrDefault();
+        return Json(student == null ? true : "This Email is already used.");
+    }
+
+    public IActionResult Login() => View();
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var result = await _signInManager.PasswordSignInAsync(
+            model.Email,        // Username
+            model.Password,     // Password
+            false,              // RememberMe
+            false               // LockoutOnFailure
+        );
+
+        if (!result.Succeeded)
         {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> RegisterAsync(RegisterViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            ApplicationUser user = new ApplicationUser()
-            {
-                UserName = model.Email,
-                Email = model.Email,
-            };
-            var res = await usermanager.CreateAsync(user, model.Password);
-            if (res.Succeeded) 
-            {
-                await usermanager.AddToRoleAsync(user, "Student");
-                return RedirectToAction("index", "home");
-            }
-            return RedirectToAction("Login");
-        }
-
-        public IActionResult CheckEmail(string Email)
-        {
-            var student = studentrepo.Find(s => s.Email == Email).FirstOrDefault();
-            return Json(student == null ? true : "This Email is already used.");
-        }
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var student = studentrepo.Find(s => s.Email == model.Email).FirstOrDefault();
-
-            if (student == null)
-            {
-                ModelState.AddModelError("Email", "This email is not registered.");
-                return View(model);
-            }
-
-            if (student.Password != model.Password)
-            {
-                ModelState.AddModelError("Password", "Incorrect password.");
-                return View(model);
-            }
-
-            var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, student.Name),
-                    new Claim(ClaimTypes.Email, student.Email),
-                    new Claim(ClaimTypes.Role, "Student")
-                };
-
-            var ci = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var cp = new ClaimsPrincipal(ci);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, cp);
-
-            return RedirectToAction("Index", "Home");
+            ModelState.AddModelError("", "Invalid email or password.");
+            return View(model);
         }
 
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login");
-        }
+        return RedirectToAction("Index", "Home");
+    }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Login");
     }
 }
