@@ -32,12 +32,14 @@ namespace SchoolWebApplication.Controllers
             var model = deptrepo.GetById(id.Value);
             return (model == null)? NotFound() : View(model);
         }
-
+        
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(Department dept)
         {
             if (!ModelState.IsValid) 
@@ -47,6 +49,7 @@ namespace SchoolWebApplication.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -55,6 +58,7 @@ namespace SchoolWebApplication.Controllers
             return (model == null) ? NotFound() : View(model);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(Department dept,int id)
         {
             if (dept == null)
@@ -65,6 +69,7 @@ namespace SchoolWebApplication.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id) 
         {
             var dept = deptrepo.GetById(id);
@@ -73,6 +78,7 @@ namespace SchoolWebApplication.Controllers
             return View(dept);
         }
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteConfirmed(int id)
         {
             deptrepo.Delete(id);

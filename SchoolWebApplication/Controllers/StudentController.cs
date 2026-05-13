@@ -1,5 +1,6 @@
 ﻿using Helper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolWebApplication.Filters;
@@ -13,11 +14,16 @@ namespace SchoolWebApplication.Controllers
     {
         IEntityRepo<Student> studentrepo;
         IEntityRepo<Department> deptrepo;
+        UserManager<ApplicationUser> _userManager;
 
-        public StudentController(IEntityRepo<Department> _deptrepo, IEntityRepo<Student> _studentRepo)
+        public StudentController(
+            IEntityRepo<Department> _deptrepo,
+            IEntityRepo<Student> _studentRepo,
+            UserManager<ApplicationUser> userManager)
         {
             studentrepo = _studentRepo;
             deptrepo = _deptrepo;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -34,12 +40,14 @@ namespace SchoolWebApplication.Controllers
             return (model == null) ? NotFound() : View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewBag.Departments = deptrepo.GetAll();
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(Student student)
         {
             if (!ModelState.IsValid) 
@@ -52,25 +60,38 @@ namespace SchoolWebApplication.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-                return BadRequest();
+            if (id == null) return BadRequest();
+
+            if (!User.IsInRole("Admin"))
+            {
+                var currentUser = await _userManager.GetUserAsync(User);
+                if (currentUser.StudentId != id)
+                    return Forbid();
+            }
+
             ViewBag.Departments = deptrepo.GetAll();
             var model = studentrepo.GetById(id.Value);
             return (model == null) ? NotFound() : View(model);
         }
         [HttpPost]
-        public IActionResult Edit(Student student, int id)
+        public async Task<IActionResult> Edit(Student student, int id)
         {
-            if (student == null)
-                return BadRequest();
+            if (!User.IsInRole("Admin"))
+            {
+                var currentUser = await _userManager.GetUserAsync(User);
+                if (currentUser.StudentId != id)
+                    return Forbid();
+            }
+
             student.Id = id;
             studentrepo.Update(student);
             studentrepo.Save();
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var student = studentrepo.GetById(id);
@@ -79,6 +100,7 @@ namespace SchoolWebApplication.Controllers
             return View(student);
         }
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteConfirmed(int id)
         {
             studentrepo.Delete(id);
