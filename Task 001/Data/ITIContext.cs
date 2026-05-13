@@ -60,9 +60,11 @@ namespace Task_001
 
             modelBuilder.Entity<Department>(d =>
             {
-                d.HasData(  new Department { DeptId = 100, Capacity = 50, MgrId = null, Name = ".net" },
-                            new Department { DeptId = 200, Capacity = 30, MgrId = null, Name = "pd" },
-                            new Department { DeptId = 300, Capacity = 25, MgrId = null, Name = "os" });
+                d.HasData(
+                    new Department { DeptId = 100, Capacity = 50, MgrId = null, Name = ".net", Status = true },
+                    new Department { DeptId = 200, Capacity = 30, MgrId = null, Name = "pd", Status = true },
+                    new Department { DeptId = 300, Capacity = 25, MgrId = null, Name = "os", Status = true }
+                );
             });
 
             modelBuilder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());

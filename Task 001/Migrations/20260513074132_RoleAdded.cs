@@ -17,9 +17,9 @@ namespace Task_001.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "1", "878907d4-f84e-4416-ab8d-f6722a8b2b07", "Admin", "ADMIN" },
-                    { "2", "413c8824-9298-4ca0-9f63-c61152e384d1", "Student", "STUDENT" },
-                    { "3", "a0b16000-d6ca-4626-99a5-9e4b235f0891", "Instructor", "INSTRUCTOR" }
+                    { "1", "f9667fbf-236d-4259-938c-ab17dae53011", "Admin", "ADMIN" },
+                    { "2", "2b33c974-16bc-44e3-aea6-0055bff3f23a", "Student", "STUDENT" },
+                    { "3", "3279ca46-f61a-4c51-b4eb-37770f15db6b", "Instructor", "INSTRUCTOR" }
                 });
         }
 
