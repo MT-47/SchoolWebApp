@@ -1,6 +1,7 @@
 ﻿using Helper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchoolWebApplication.Models;
@@ -12,9 +13,13 @@ namespace SchoolWebApplication.Controllers
     public class AccountController : Controller
     {
         IEntityRepo<Student> studentrepo;
-        public AccountController(IEntityRepo<Student> _studentRepo) 
+        UserManager<ApplicationUser> usermanager;
+        SignInManager<ApplicationUser> signinmanager;
+        public AccountController(IEntityRepo<Student> _studentRepo, UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager) 
         {
             studentrepo = _studentRepo;
+            usermanager = _userManager;
+            signinmanager = _signInManager;
         }
 
         public IActionResult Register()
@@ -22,22 +27,22 @@ namespace SchoolWebApplication.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Register(RegisterViewModel model)
+        public async Task<IActionResult> RegisterAsync(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var student = new Student
+            ApplicationUser user = new ApplicationUser()
             {
+                UserName = model.Email,
                 Email = model.Email,
-                Name = model.Name,
-                Age = model.Age,
-                Password = model.Password
             };
-
-            studentrepo.Add(student);
-            studentrepo.Save();
-
+            var res = await usermanager.CreateAsync(user, model.Password);
+            if (res.Succeeded) 
+            {
+                await usermanager.AddToRoleAsync(user, "Student");
+                return RedirectToAction("index", "home");
+            }
             return RedirectToAction("Login");
         }
 
