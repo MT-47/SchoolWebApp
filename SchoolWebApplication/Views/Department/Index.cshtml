@@ -15,11 +15,14 @@
 
         <div class="d-flex gap-2">
 
-            <a asp-controller="Department"
-                   asp-action="Create"
-                   class="btn btn-success">
-                + Create Department
-            </a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Department"
+                       asp-action="Create"
+                       class="btn btn-success">
+                    + Create Department
+                </a>
+            }
 
             <a asp-controller="Home"
                    asp-action="Index"
@@ -76,19 +79,22 @@
                                             Details
                                         </a>
 
-                                        <a asp-controller="Department"
-                                               asp-action="Edit"
-                                               asp-route-id="@item.DeptId"
-                                               class="btn btn-sm btn-warning">
-                                            Edit
-                                        </a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-controller="Department"
+                                                   asp-action="Edit"
+                                                   asp-route-id="@item.DeptId"
+                                                   class="btn btn-sm btn-warning">
+                                                Edit
+                                            </a>
 
-                                        <a asp-controller="Department"
-                                               asp-action="Delete"
-                                               asp-route-id="@item.DeptId"
-                                               class="btn btn-sm btn-danger">
-                                            Delete
-                                        </a>
+                                            <a asp-controller="Department"
+                                                   asp-action="Delete"
+                                                   asp-route-id="@item.DeptId"
+                                                   class="btn btn-sm btn-danger">
+                                                Delete
+                                            </a>
+                                        }
 
                                     </div>
 
