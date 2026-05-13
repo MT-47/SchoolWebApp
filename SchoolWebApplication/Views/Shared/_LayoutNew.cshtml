@@ -1,0 +1,177 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en" class="h-100">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.css" />
+
+</head>
+
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+
+        <div class="container">
+
+            <!-- Logo -->
+            <a class="navbar-brand fw-bold fs-4"
+                   asp-controller="Home"
+                   asp-action="Index">
+
+                School Web App
+
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler border-0 shadow-none"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <!-- Navbar Content -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <!-- Links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link px-lg-3 fw-semibold"
+                               asp-controller="Student"
+                               asp-action="Index">
+
+                            Students
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link px-lg-3 fw-semibold"
+                               asp-controller="Department"
+                               asp-action="Index">
+
+                            Departments
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+                <!-- Auth Buttons -->
+                <div class="d-flex flex-column flex-lg-row gap-2">
+
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a class="btn btn-outline-light btn-sm px-3"
+                               asp-controller="Account"
+                               asp-action="Login">
+
+                            Login
+
+                        </a>
+
+                        <a class="btn btn-primary btn-sm px-3"
+                               asp-controller="Account"
+                               asp-action="Register">
+
+                            Register
+
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark px-3 py-2 fs-6 align-self-lg-center">
+
+                            Hi @User.Identity.Name
+
+                        </span>
+
+                        <a class="btn btn-outline-danger btn-sm px-3"
+                               asp-controller="Account"
+                               asp-action="Logout">
+
+                            Logout
+
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container flex-grow-1 py-4">
+
+        <div class="bg-white rounded-3 shadow-sm p-4">
+
+            @RenderBody()
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-3 mt-auto border-top border-secondary">
+
+        <div class="container">
+
+            <div class="d-flex flex-column flex-md-row
+                justify-content-between align-items-center
+                text-center text-md-start gap-2">
+
+                <small class="text-secondary">
+
+                    &copy; 2026 School Web Application
+
+                </small>
+
+                <small class="text-secondary">
+
+                    Built with ASP.NET Core MVC & Bootstrap
+
+                </small>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

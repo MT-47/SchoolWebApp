@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Helper/Helper.csproj" Id="412da66a-661f-4c9f-956a-94992ef0aaca" />
+  <Project Path="SchoolWebApplication/SchoolWebApplication.csproj" Id="4c34a70b-ba57-4a34-b197-38e0a6c7e4ce" />
+  <Project Path="Task 001/Task 001.csproj" />
+  <Project Path="Task 002/Task 002.csproj" Id="90b99844-aeab-48ad-9d7a-a95cc18576b7" />
+  <Project Path="Task 003/Task 003.csproj" Id="5934108f-f588-4880-8d68-eef082023811" />
+</Solution>

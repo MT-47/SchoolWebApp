@@ -1,0 +1,75 @@
+﻿@model Student
+
+@{
+    ViewBag.Title = "Student Details";
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 750px;">
+
+        <div class="card-header bg-info text-white fw-semibold">
+            Student Details
+        </div>
+
+        <div class="card-body p-4">
+
+            <dl class="row mb-0">
+
+                <dt class="col-sm-3 text-muted">
+                    ID
+                </dt>
+
+                <dd class="col-sm-9 fw-semibold">
+                    @Model?.Id
+                </dd>
+
+                <dt class="col-sm-3 text-muted">
+                    Name
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model?.Name
+                </dd>
+
+                <dt class="col-sm-3 text-muted">
+                    Age
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model?.Age
+                </dd>
+
+                <dt class="col-sm-3 text-muted">
+                    Email
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model?.Email
+                </dd>
+
+                <dt class="col-sm-3 text-muted">
+                    Department
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model?.Department?.Name
+                </dd>
+
+            </dl>
+
+        </div>
+
+    </div>
+
+    <div class="text-center mt-4">
+
+        <a asp-controller="Student"
+               asp-action="Index"
+               class="btn btn-outline-secondary px-4">
+            Back to List
+        </a>
+
+    </div>
+
+</div>
