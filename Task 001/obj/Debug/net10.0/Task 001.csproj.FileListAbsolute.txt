@@ -12,3 +12,4 @@ D:\Coding\0_iti 4 months\SY03\EF\Lab 001\Task 001\obj\Debug\net10.0\refint\Task 
 D:\Coding\0_iti 4 months\SY03\EF\Lab 001\Task 001\obj\Debug\net10.0\Task 001.pdb
 D:\Coding\0_iti 4 months\SY03\EF\Lab 001\Task 001\obj\Debug\net10.0\Task 001.genruntimeconfig.cache
 D:\Coding\0_iti 4 months\SY03\EF\Lab 001\Task 001\obj\Debug\net10.0\ref\Task 001.dll
+D:\Coding\0_iti 4 months\SY03\EF\Lab 001\Task 001\obj\Debug\net10.0\Task 001.sourcelink.json

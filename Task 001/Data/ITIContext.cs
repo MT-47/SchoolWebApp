@@ -1,11 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Task_001
 {
-    public class ITIContext : DbContext
+    public class ApplicationUser : IdentityUser
+    {
+        // You can add additional properties here if needed
+    }
+    public class ITIContext : IdentityDbContext<ApplicationUser>
     {
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
@@ -32,7 +38,12 @@ namespace Task_001
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<IdentityRole>(r =>
+            {
+                r.HasData(new IdentityRole() { Id = "1", Name = "Admin", NormalizedName = "ADMIN" });
+                r.HasData(new IdentityRole() { Id = "2", Name = "Student", NormalizedName = "STUDENT" });
+                r.HasData(new IdentityRole() { Id = "3", Name = "Instructor", NormalizedName = "INSTRUCTOR" });
+            });
             modelBuilder.Entity<StudentCourse>().HasKey(sc => new { sc.StdId, sc.CrsId });
             
             modelBuilder.Entity<Department>()
