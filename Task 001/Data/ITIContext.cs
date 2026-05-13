@@ -88,6 +88,18 @@ namespace Task_001
                 new ApplicationUser { Id = "u10", UserName = "mt@m.com",           NormalizedUserName = "MT@M.COM",           Email = "mt@m.com",           NormalizedEmail = "MT@M.COM",           StudentId = 10, SecurityStamp = "u10", ConcurrencyStamp = "u10" },
                 new ApplicationUser { Id = "u11", UserName = "b@mail.com",         NormalizedUserName = "B@MAIL.COM",         Email = "b@mail.com",         NormalizedEmail = "B@MAIL.COM",         StudentId = 11, SecurityStamp = "u11", ConcurrencyStamp = "u11" },
                 new ApplicationUser { Id = "u13", UserName = "A@B.C",              NormalizedUserName = "A@B.C",              Email = "A@B.C",              NormalizedEmail = "A@B.C",              StudentId = 13, SecurityStamp = "u13", ConcurrencyStamp = "u13" },
+
+
+                new ApplicationUser
+                {
+                    Id = "admin1",
+                    UserName = "admin@iti.gov",
+                    NormalizedUserName = "ADMIN@ITI.GOV",
+                    Email = "admin@iti.gov",
+                    NormalizedEmail = "ADMIN@ITI.GOV",
+                    SecurityStamp = "admin1",
+                    ConcurrencyStamp = "admin1"
+                }
             };
 
             foreach (var user in users)
@@ -103,7 +115,13 @@ namespace Task_001
                 new IdentityUserRole<string> { UserId = "u9", RoleId = "2" },
                 new IdentityUserRole<string> { UserId = "u10", RoleId = "2" },
                 new IdentityUserRole<string> { UserId = "u11", RoleId = "2" },
-                new IdentityUserRole<string> { UserId = "u13", RoleId = "2" }
+                new IdentityUserRole<string> { UserId = "u13", RoleId = "2" },
+                
+                new IdentityUserRole<string>
+                {
+                    UserId = "admin1",
+                    RoleId = "1"
+                }
             );
         }
     }
