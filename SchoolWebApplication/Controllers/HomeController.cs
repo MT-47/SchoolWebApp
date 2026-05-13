@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using SchoolWebApplication.Filters;
 using SchoolWebApplication.Models;
 using System.Diagnostics;
 
 namespace SchoolWebApplication.Controllers
 {
+    [NoCacheFilter]
     public class HomeController : Controller
     {
         public IActionResult Index()
